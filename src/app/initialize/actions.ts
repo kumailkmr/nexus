@@ -15,14 +15,28 @@ export async function login(formData: FormData) {
 
   const supabase = await createClient()
 
-  const { error } = await supabase.auth.signInWithPassword({
-    email,
-    password,
-  })
+  const ownerEmail = process.env.NEXUS_OWNER_EMAIL
+  const ownerPassword = process.env.NEXUS_OWNER_PASSWORD
 
-  if (error) {
-    // Provide generic error rather than specifics
-    return { error: 'The email or password is incorrect.' }
+  // Automatically handle owner initialization securely
+  if (ownerEmail && ownerPassword && email === ownerEmail && password === ownerPassword) {
+    const { error } = await supabase.auth.signInWithPassword({ email, password })
+    
+    if (error) {
+      // Attempt to sign up the authorized owner
+      const { error: signUpError } = await supabase.auth.signUp({ email, password })
+      
+      if (!signUpError) {
+        return { error: 'Account created. A verification email was sent via Supabase. Please verify before signing in.' }
+      }
+      return { error: 'Failed to initialize owner account.' }
+    }
+  } else {
+    // Standard sign-in for existing users
+    const { error } = await supabase.auth.signInWithPassword({ email, password })
+    if (error) {
+      return { error: 'The email or password is incorrect.' }
+    }
   }
 
   revalidatePath('/', 'layout')
