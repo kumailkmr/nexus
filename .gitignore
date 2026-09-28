@@ -1,0 +1,57 @@
+# dependencies
+/node_modules
+/.pnp
+.pnp.*
+.yarn/*
+!.yarn/patches
+!.yarn/plugins
+!.yarn/releases
+!.yarn/versions
+
+# testing
+/coverage
+
+# next.js
+/.next/
+/out/
+/dist/
+/build/
+
+# cache & generated
+.turbo/
+.cache/
+*.tsbuildinfo
+next-env.d.ts
+
+# logs
+*.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+.pnpm-debug.log*
+
+# misc & OS
+.DS_Store
+Thumbs.db
+
+# vercel
+.vercel/
+
+# keys and certs
+*.pem
+*.key
+*.crt
+
+# env files
+.env
+.env.*
+!.env.example
+
+# IDEs
+.idea/
+.vscode/
+*.swp
+*.swo
+
+# scratch / dev temp
+/scratch/

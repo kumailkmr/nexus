@@ -1,0 +1,36 @@
+@import "tailwindcss";
+
+@theme {
+  --color-nexus-bg: #FFFFFF;
+  --color-nexus-secondary: #F7F8FA;
+  --color-nexus-surface: #F1F3F5;
+  --color-nexus-primary: #101828;
+  --color-nexus-secondary-text: #667085;
+  --color-nexus-border: #E4E7EC;
+  --color-nexus-blue: #155EEF;
+  --color-nexus-blue-hover: #2970FF;
+  --color-nexus-cyan: #00B8D9;
+  --color-nexus-success: #12B76A;
+  --color-nexus-muted: #98A2B3;
+  
+  --font-sans: var(--font-inter), ui-sans-serif, system-ui, sans-serif;
+  --font-mono: var(--font-jetbrains-mono), ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
+}
+
+body {
+  background-color: var(--color-nexus-bg);
+  color: var(--color-nexus-primary);
+}
+
+@layer utilities {
+  .subtle-grid {
+    background-image: linear-gradient(var(--color-nexus-border) 1px, transparent 1px),
+      linear-gradient(90deg, var(--color-nexus-border) 1px, transparent 1px);
+    background-size: 40px 40px;
+    background-position: center center;
+  }
+  .mask-radial-faded {
+    mask-image: radial-gradient(circle at center, black 0%, transparent 70%);
+    -webkit-mask-image: radial-gradient(circle at center, black 0%, transparent 70%);
+  }
+}

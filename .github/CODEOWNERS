@@ -1,0 +1,9 @@
+* @kumailkmr
+
+# Specific protections
+/.github/ @kumailkmr
+/src/ @kumailkmr
+/app/ @kumailkmr
+/lib/ @kumailkmr
+/components/ @kumailkmr
+/supabase/ @kumailkmr

@@ -1,0 +1,28 @@
+#!/usr/bin/env sh
+
+echo "Running pre-commit security checks..."
+
+# 1. Staged secret check
+STAGED_FILES=$(git diff --cached --name-only --diff-filter=ACM)
+
+if [ -n "$STAGED_FILES" ]; then
+  for FILE in $STAGED_FILES; do
+    if [ "$FILE" = ".env.example" ] || [ "$FILE" = ".github/workflows/security.yml" ] || [ "$FILE" = ".husky/pre-commit" ]; then
+      continue
+    fi
+    if grep -q -iE "(SUPABASE_SERVICE_ROLE_KEY=|OPENAI_API_KEY=|HIGGSFIELD_API_KEY=|NEXUS_OWNER_EMAIL=.*@)" "$FILE"; then
+      echo "ERROR: Forbidden secret pattern detected in $FILE. Commit blocked."
+      exit 1
+    fi
+    if grep -q -iE "(BEGIN PRIVATE KEY|BEGIN RSA PRIVATE KEY|BEGIN OPENSSH PRIVATE KEY)" "$FILE"; then
+      echo "ERROR: Private key detected in $FILE. Commit blocked."
+      exit 1
+    fi
+  done
+fi
+
+echo "Running typecheck and lint..."
+npm run lint || exit 1
+npx tsc --noEmit || exit 1
+
+echo "Pre-commit checks passed."
