@@ -1,9 +1,9 @@
 export function MetricCards() {
   const metrics = [
     { label: 'Active Projects', value: '0' },
-    { label: 'Active Campaigns', value: '0' },
-    { label: 'Generations', value: '0' },
-    { label: 'AI Spend', value: '$0.00' },
+    { label: 'Content Created', value: '0' },
+    { label: 'Pending Reviews', value: '0' },
+    { label: 'Current Spend', value: '₹0' },
   ]
 
   return (

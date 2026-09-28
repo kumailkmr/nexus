@@ -2,46 +2,10 @@
 
 import Link from 'next/link'
 import { usePathname } from 'next/navigation'
-import { 
-  LayoutDashboard, Wand2, FolderOpen, Target, 
-  FileText, Image as ImageIcon, Calendar, 
-  Users, CheckSquare, BarChart3, Settings,
-  X
-} from 'lucide-react'
+import { X } from 'lucide-react'
+import { NAVIGATION_CONFIG, NavSection } from '../navigation/navigation-config'
 
-const navGroups = [
-  {
-    title: 'Workspace',
-    items: [
-      { name: 'Dashboard', href: '/app', icon: LayoutDashboard },
-      { name: 'Studio', href: '/app/studio', icon: Wand2 },
-      { name: 'Projects', href: '/app/projects', icon: FolderOpen },
-      { name: 'Campaigns', href: '/app/campaigns', icon: Target },
-    ]
-  },
-  {
-    title: 'Content',
-    items: [
-      { name: 'Content', href: '/app/content', icon: FileText },
-      { name: 'Assets', href: '/app/assets', icon: ImageIcon },
-      { name: 'Calendar', href: '/app/calendar', icon: Calendar },
-    ]
-  },
-  {
-    title: 'Business',
-    items: [
-      { name: 'Clients', href: '/app/clients', icon: Users },
-      { name: 'Approvals', href: '/app/approvals', icon: CheckSquare },
-      { name: 'Analytics', href: '/app/analytics', icon: BarChart3 },
-    ]
-  },
-  {
-    title: 'System',
-    items: [
-      { name: 'Settings', href: '/app/settings', icon: Settings },
-    ]
-  }
-]
+const SECTIONS: NavSection[] = ['WORKSPACE', 'OPERATIONS', 'BUSINESS', 'SYSTEM']
 
 export function Sidebar({ mobile, onClose }: { mobile?: boolean, onClose?: () => void }) {
   const pathname = usePathname()
@@ -63,33 +27,38 @@ export function Sidebar({ mobile, onClose }: { mobile?: boolean, onClose?: () =>
       </div>
 
       <div className="flex-1 py-6 px-3 flex flex-col gap-6">
-        {navGroups.map((group) => (
-          <div key={group.title}>
-            <h3 className="px-3 text-xs font-semibold text-nexus-muted uppercase tracking-wider mb-2">
-              {group.title}
-            </h3>
-            <div className="flex flex-col gap-1">
-              {group.items.map((item) => {
-                const isActive = pathname === item.href
-                return (
-                  <Link
-                    key={item.name}
-                    href={item.href}
-                    onClick={onClose}
-                    className={`flex items-center gap-3 px-3 py-2 rounded-lg text-sm font-medium transition-colors ${
-                      isActive 
-                        ? 'bg-nexus-surface text-nexus-primary' 
-                        : 'text-nexus-secondary-text hover:bg-nexus-secondary hover:text-nexus-primary'
-                    }`}
-                  >
-                    <item.icon className={`w-4 h-4 ${isActive ? 'text-nexus-blue' : 'text-nexus-muted'}`} />
-                    {item.name}
-                  </Link>
-                )
-              })}
+        {SECTIONS.map((section) => {
+          const items = NAVIGATION_CONFIG.filter(item => item.section === section && item.desktopVisible)
+          if (items.length === 0) return null
+          
+          return (
+            <div key={section}>
+              <h3 className="px-3 text-xs font-semibold text-nexus-muted uppercase tracking-wider mb-2">
+                {section}
+              </h3>
+              <div className="flex flex-col gap-1">
+                {items.map((item) => {
+                  const isActive = pathname === item.href || pathname.startsWith(`${item.href}/`) && item.href !== '/app'
+                  return (
+                    <Link
+                      key={item.label}
+                      href={item.href}
+                      onClick={onClose}
+                      className={`flex items-center gap-3 px-3 py-2 rounded-lg text-sm font-medium transition-colors ${
+                        isActive 
+                          ? 'bg-nexus-surface text-nexus-primary' 
+                          : 'text-nexus-secondary-text hover:bg-nexus-secondary hover:text-nexus-primary'
+                      }`}
+                    >
+                      <item.icon className={`w-4 h-4 ${isActive ? 'text-nexus-blue' : 'text-nexus-muted'}`} />
+                      {item.label}
+                    </Link>
+                  )
+                })}
+              </div>
             </div>
-          </div>
-        ))}
+          )
+        })}
       </div>
     </div>
   )

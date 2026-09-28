@@ -1,4 +1,4 @@
-import { EmptyState } from '@/components/ui/EmptyState'
+import { EmptyState } from '@/components/states/EmptyState'
 import { FolderOpen } from 'lucide-react'
 
 export function ActiveProjects() {
